@@ -1,0 +1,11 @@
+## Name of the node
+-name olympics
+
+## Cookie for distributed erlang
+-setcookie beam
+
+## Enable SMP
+-smp enable
+
++K true
++A 30
