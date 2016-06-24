@@ -1,0 +1,19 @@
+{application, beam_olympics, [
+  {description, "Let's find the best beamer!"},
+  {vsn, "0.0.1"},
+  {id, "beam_olympics"},
+  {registered, []},
+  {applications, [
+    kernel,
+    stdlib,
+    sasl
+  ]},
+  {modules, []},
+  {mod, {bo, []}},
+  {env, []},
+  {maintainers, ["Inaka"]},
+  {licenses, ["Apache 2.0"]},
+  {links, [ {"Github", "https://github.com/inaka/beam_olympics"}
+          ]},
+  {build_tools, ["rebar3"]}
+ ]}.
