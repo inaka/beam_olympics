@@ -8,6 +8,7 @@
         , stop/0
         , start/2
         , stop/1
+        , start_phase/3
         ]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -26,8 +27,22 @@ stop() -> application:stop(beam_olympics).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% @private
 -spec start(application:start_type(), any()) -> {ok, pid()} | {error, term()}.
-start(_StartType, _Args) -> {ok, self()}.
+start(_StartType, _Args) -> bo_sup:start_link().
 
 %% @private
 -spec stop([]) -> ok.
 stop([]) -> ok.
+
+%% @private
+-spec start_phase(atom(), StartType::application:start_type(), []) ->
+  ok | {error, _}.
+start_phase(create_schema, _StartType, []) ->
+  _ = application:stop(mnesia),
+  Node = node(),
+  case mnesia:create_schema([Node]) of
+    ok -> ok;
+    {error, {Node, {already_exists, Node}}} -> ok
+  end,
+  {ok, _} = application:ensure_all_started(mnesia),
+  % Create persistency schema
+  sumo:create_schema().

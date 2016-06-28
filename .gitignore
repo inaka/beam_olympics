@@ -1,3 +1,5 @@
+Mnesia*/
+log/
 .eunit
 deps
 *.o

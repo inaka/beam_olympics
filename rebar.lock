@@ -1,1 +1,30 @@
-[{<<"eper">>,{pkg,<<"eper">>,<<"0.94.0">>},0}].
+{"1.1.0",
+[{<<"eper">>,{pkg,<<"eper">>,<<"0.94.0">>},0},
+ {<<"goldrush">>,
+  {git,"git://github.com/DeadZen/goldrush.git",
+       {ref,"212299233c7e7eb63a97be2777e1c05ebaa58dbe"}},
+  2},
+ {<<"lager">>,
+  {git,"https://github.com/basho/lager.git",
+       {ref,"8187757388c9adc915379caaab36a2f2ca26e944"}},
+  1},
+ {<<"quickrand">>,
+  {git,"https://github.com/okeuday/quickrand.git",
+       {ref,"559e5e3f28bb2bf51acbc38f1c47b12c10094117"}},
+  2},
+ {<<"sumo_db">>,
+  {git,"https://github.com/inaka/sumo_db.git",
+       {ref,"905ab1d3bed1b05289c7ee51180c7ba386920e72"}},
+  0},
+ {<<"uuid">>,
+  {git,"https://github.com/okeuday/uuid.git",
+       {ref,"0b0da764bb7a37726b41e3eccada1ff0e0e5120c"}},
+  1},
+ {<<"worker_pool">>,
+  {git,"https://github.com/inaka/worker_pool.git",
+       {ref,"94fd1633413e553e5ee1f302b5ad23488510dd70"}},
+  1}]}.
+[
+{pkg_hash,[
+ {<<"eper">>, <<"F5FB2DAA0DF8878748E1C598428EDA942A173E5121FF35C1D632129B84593A3A">>}]}
+].
