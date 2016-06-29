@@ -56,7 +56,7 @@ sumo_wakeup(Player) -> Player.
 new(Name, Node) ->
   #{ name => Name
    , node => Node
-   , task => first_task
+   , task => bo_tasks:first()
    , created_at => calendar:universal_time()
    }.
 
