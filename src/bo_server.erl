@@ -1,6 +1,6 @@
 -module(bo_server).
 
--behavior(gen_server).
+-behaviour(gen_server).
 
 -export([ start_link/0
         ]).
@@ -32,13 +32,13 @@ init(noargs) -> {ok, #{}}.
 
 -spec handle_call
   ({signup, bo_players:name()}, {pid(), term()}, state()) ->
-    {reply, {ok, bo_tasks:task()} | {error, conflict}, state()};
+    {reply, {ok, bo_task:task()} | {error, conflict}, state()};
   ({task, bo_players:name()}, {pid(), term()}, state()) ->
-    {reply, {ok, bo_tasks:task()} | {error, forbidden | notfound}, state()}.
+    {reply, {ok, bo_task:task()} | {error, forbidden | notfound}, state()}.
 handle_call({signup, PlayerName}, {From, _}, State) ->
   Node = node(From),
   try bo_players_repo:signup(PlayerName, Node) of
-    Player -> {reply, {ok, bo_players:task(Player)}, State}
+    Player -> {reply, {ok, task(Player)}, State}
   catch
     _:conflict -> {reply, {error, conflict}, State}
   end;
@@ -48,7 +48,7 @@ handle_call({task, PlayerName}, {From, _}, State) ->
     notfound -> {reply, {error, notfound}, State};
     Player ->
       case bo_players:node(Player) of
-        Node -> {reply, {ok, bo_players:task(Player)}, State};
+        Node -> {reply, {ok, task(Player)}, State};
         NotNode ->
           error_logger:warning_msg(
             "~p trying to access from ~p but registered at ~p",
@@ -68,3 +68,8 @@ terminate(_Reason, _State) -> ok.
 code_change(_OldVsn, State, _Extra) -> {ok, State}.
 -spec handle_info(_, state()) -> {noreply, state()}.
 handle_info(_, State) -> {noreply, State}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Internals
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+task(Player) -> bo_tasks:describe(bo_players:task(Player)).

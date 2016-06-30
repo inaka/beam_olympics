@@ -4,7 +4,10 @@
 -export([signup/2, task/2]).
 -export([gen_call/2]).
 
--type task() :: term().
+-type task() :: #{ name := module()
+                 , desc := binary()
+                 , test := fun((fun()) -> term())
+                 }.
 -type player_name() :: binary().
 
 -spec start(atom()) -> {ok, node()}.
