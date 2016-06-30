@@ -42,7 +42,6 @@ first_task(_Config) ->
     ct:comment("It's a proper task"),
     #{ name := FirstTaskName
      , desc := FirstTaskDesc
-     , test := FirstTaskTest
      } = FirstTask,
 
     ct:comment("Task name is a module that implements bo_task behaviour"),
@@ -50,9 +49,6 @@ first_task(_Config) ->
 
     ct:comment("Desc is a non-empty binary"),
     <<_:1/binary, _/binary>> = FirstTaskDesc,
-
-    ct:comment("Test is a fun with one argument"),
-    true = is_function(FirstTaskTest, 1),
 
     ok
   after

@@ -1,7 +1,7 @@
 -module(bo_test_client).
 
 -export([start/1, stop/1]).
--export([signup/2, task/2]).
+-export([signup/2, task/2, submit/3]).
 -export([gen_call/2]).
 
 -type task() :: #{ name := module()
@@ -13,7 +13,9 @@
 -spec start(atom()) -> {ok, node()}.
 start(NodeName) ->
   {ok, Node} = slave:start("127.0.0.1", NodeName),
-  spawn(Node, code, add_paths, [code:get_path()]),
+  {ok, Cwd} = file:get_cwd(),
+  TestEbin = filename:join(Cwd, "../../lib/beam_olympics/test"),
+  proc_lib:spawn(Node, code, add_paths, [[TestEbin]]),
   ct:log("Nodes after starting ~p: ~p", [NodeName, nodes(connected)]),
   {ok, Node}.
 
@@ -24,17 +26,18 @@ stop(Node) ->
   ok.
 
 -spec signup(node(), player_name()) -> {ok, task()} | {error, term()}.
-signup(Node, Player) ->
-  call(Node, {signup, Player}).
+signup(Node, Player) -> call(Node, {signup, Player}).
 
 -spec task(node(), player_name()) -> {ok, task()} | {error, term()}.
-task(Node, Player) ->
-  call(Node, {task, Player}).
+task(Node, Player) -> call(Node, {task, Player}).
 
+-spec submit(node(), player_name(), term()) ->
+  bo_task:result() | {error, forbidden | notfound}.
+submit(Node, Player, Solution) -> call(Node, {submit, Player, Solution}).
 
 call(Node, Msg) ->
   Caller = self(),
-  Pid = spawn(Node, ?MODULE, gen_call, [Caller, Msg]),
+  Pid = proc_lib:spawn(Node, ?MODULE, gen_call, [Caller, Msg]),
   receive
     {Pid, Response} -> Response
   after 5000 ->
@@ -43,7 +46,7 @@ call(Node, Msg) ->
 
 -spec gen_call(pid(), term()) -> {pid(), term()}.
 gen_call(Caller, Msg) ->
-  try gen_server:call({bo_server, 'bo_test@127.0.0.1'}, Msg) of
+  try gen_server:call({bo_server, 'bo_test@127.0.0.1'}, Msg, 60000) of
     Something ->
       Caller ! {self(), Something}
   catch

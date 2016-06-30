@@ -2,31 +2,27 @@
 
 -behaviour(bo_task).
 
--export([describe/0, test/1]).
+-export([description/0, expected_arity/0, timeout/0, tests/0]).
 
--spec describe() -> bo_task:task().
-describe() ->
-  #{ name => ?MODULE
-   , desc => <<"Echo: Return whatever you receive">>
-   , test => fun test/1
-   }.
+-spec description() -> binary().
+description() -> <<"Echo: Return whatever you receive">>.
 
--spec test(fun()) -> bo_task:result().
-test(Fun) when not is_function(Fun, 1) -> {error, invalid_input};
-test(Fun) ->
-  Results =
-    lists:filtermap(
-      fun(Something) ->
-        case Fun(Something) of
-          Something -> false;
-          SomethingElse ->
-            {true, #{ input => Something
-                    , output => SomethingElse
-                    , expected => Something
-                    }}
-        end
-      end, [a, 1, 2.14, #{}]),
-  case Results of
-    [] -> ok;
-    Results -> {failures, Results}
+-spec expected_arity() -> 1.
+expected_arity() -> 1.
+
+-spec timeout() -> 1000.
+timeout() -> 1000.
+
+-spec tests() -> [bo_task:test()].
+tests() -> [build_test(Input) || Input <- [a, 1, 2.14, #{}]].
+
+build_test(Something) ->
+  fun(Fun) ->
+    case Fun(Something) of
+      Something -> ok;
+      SomethingElse -> {error, #{ input => Something
+                                , output => SomethingElse
+                                , expected => Something
+                                }}
+    end
   end.
