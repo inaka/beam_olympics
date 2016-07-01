@@ -7,12 +7,13 @@
     kernel,
     stdlib,
     sasl,
+    mnesia,
     sumo_db
   ]},
   {modules, []},
   {mod, {bo, []}},
   {env, []},
-  {start_phases , [{create_schema, []}]},
+  {start_phases, [{create_schema, []}]},
   {maintainers, ["Inaka"]},
   {licenses, ["Apache 2.0"]},
   {links, [ {"Github", "https://github.com/inaka/beam_olympics"}
