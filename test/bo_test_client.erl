@@ -4,10 +4,7 @@
 -export([signup/2, task/2, submit/3]).
 -export([gen_call/2]).
 
--type task() :: #{ name := module()
-                 , desc := binary()
-                 , test := fun((fun()) -> term())
-                 }.
+-type task() :: bo_task:task().
 -type player_name() :: binary().
 
 -spec start(atom()) -> {ok, node()}.
@@ -32,7 +29,9 @@ signup(Node, Player) -> call(Node, {signup, Player}).
 task(Node, Player) -> call(Node, {task, Player}).
 
 -spec submit(node(), player_name(), term()) ->
-  bo_task:result() | {error, forbidden | notfound}.
+    {ok, bo_task:task()} | the_end
+  | {error, invalid | timeout | forbidden | notfound}
+  | {failures, [term()]}.
 submit(Node, Player, Solution) -> call(Node, {submit, Player, Solution}).
 
 call(Node, Msg) ->

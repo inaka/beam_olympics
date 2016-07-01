@@ -7,12 +7,13 @@
         , invalid_user/1
         , test_timeout/1
         , test_fails/1
+        , test_error/1
         ]).
 
 -type config() :: proplists:proplist().
 
 -spec all() -> [atom()].
-all() -> [invalid_input, invalid_user, test_timeout, test_fails].
+all() -> [invalid_input, invalid_user, test_timeout, test_fails, test_error].
 
 -spec init_per_suite(config()) -> config().
 init_per_suite(Config) ->
@@ -80,9 +81,18 @@ test_fails(Config) ->
   {client, Client} = lists:keyfind(client, 1, Config),
 
   ct:comment("Providing a function that fails the tests returns errors"),
-  {failures, Failures} = submit(Client, fun(X) -> {'not', X} end),
+  {failures, [_|_]} = submit(Client, fun(X) -> {'not', X} end),
 
-  ct:log("~p", [Failures]),
+  {comment, ""}.
+
+-spec test_error(config()) -> {comment, string()}.
+test_error(Config) ->
+  {client, Client} = lists:keyfind(client, 1, Config),
+
+  ct:comment("Providing a function that errors the tests returns errors"),
+  {failures, Failures} = submit(Client, fun(X) -> X / 2 end),
+
+  [_|_] = [Err || #{error := Err, stack := _} <- Failures],
 
   {comment, ""}.
 

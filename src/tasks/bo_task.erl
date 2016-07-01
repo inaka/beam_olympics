@@ -59,6 +59,7 @@ do_test(Task, Fun) ->
         ok -> false;
         {error, Msg} -> {true, Msg}
       catch
-        _:Exception -> {true, {Exception, erlang:get_stacktrace()}}
+        _:Exception ->
+          {true, #{error => Exception, stack => erlang:get_stacktrace()}}
       end
     end, Task:tests()).
