@@ -39,7 +39,10 @@ init(noargs) -> {ok, #{}}.
   ({submit, bo_players:name(), term()}, {pid(), term()}, state()) ->
     {reply, {ok, bo_task:task()} | the_end
           | {error, invalid | timeout | ended | forbidden | notfound}
-          | {failures, [term()]}, state()}.
+          | {failures, [term()]}, state()};
+  ({skip, bo_players:name()}, {pid(), term()}, state()) ->
+    {reply, {ok, bo_task:task()} | the_end
+          | {error, ended | forbidden | notfound}, state()}.
 handle_call({signup, PlayerName}, {From, _}, State) ->
   Node = node(From),
   try bo_players_repo:signup(PlayerName, Node) of
@@ -48,33 +51,19 @@ handle_call({signup, PlayerName}, {From, _}, State) ->
     _:conflict -> {reply, {error, conflict}, State}
   end;
 handle_call({task, PlayerName}, {From, _}, State) ->
-  Node = node(From),
-  case bo_players_repo:fetch(PlayerName) of
-    notfound -> {reply, {error, notfound}, State};
-    Player ->
-      case bo_players:node(Player) of
-        Node -> {reply, task(Player), State};
-        NotNode ->
-          error_logger:warning_msg(
-            "~p trying to access from ~p but registered at ~p",
-            [PlayerName, Node, NotNode]),
-          {reply, {error, forbidden}, State}
-      end
+  case check_player(PlayerName, From) of
+    {error, Error} -> {reply, {error, Error}, State};
+    Player -> {reply, task(Player), State}
   end;
 handle_call({submit, PlayerName, Solution}, {From, _}, State) ->
-  Node = node(From),
-  case bo_players_repo:fetch(PlayerName) of
-    notfound -> {reply, {error, notfound}, State};
-    Player ->
-      case bo_players:node(Player) of
-        Node ->
-          {reply, test(Player, Solution), State};
-        NotNode ->
-          error_logger:warning_msg(
-            "~p trying to access from ~p but registered at ~p",
-            [PlayerName, Node, NotNode]),
-          {reply, {error, forbidden}, State}
-      end
+  case check_player(PlayerName, From) of
+    {error, Error} -> {reply, {error, Error}, State};
+    Player -> {reply, test(Player, Solution), State}
+  end;
+handle_call({skip, PlayerName}, {From, _}, State) ->
+  case check_player(PlayerName, From) of
+    {error, Error} -> {reply, {error, Error}, State};
+    Player -> {reply, advance(Player), State}
   end.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -92,23 +81,36 @@ handle_info(_, State) -> {noreply, State}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Internals
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-task(Player) ->
-  case bo_players:task(Player) of
-    undefined -> {error, ended};
-    Task -> {ok, bo_task:describe(Task)}
-  end.
-
-test(Player, Solution) ->
-  case bo_players:task(Player) of
-    undefined -> {error, ended};
-    Task ->
-      case bo_task:test(Task, Solution) of
-        ok -> next_task(Player);
-        NOK -> NOK
+check_player(PlayerName, From) ->
+  Node = node(From),
+  case bo_players_repo:fetch(PlayerName) of
+    notfound -> {error, notfound};
+    Player ->
+      case bo_players:node(Player) of
+        Node -> check_task(Player);
+        NotNode ->
+          error_logger:warning_msg(
+            "~p trying to access from ~p but registered at ~p",
+            [PlayerName, Node, NotNode]),
+          {error, forbidden}
       end
   end.
 
-next_task(Player) ->
+check_task(Player) ->
+  case bo_players:task(Player) of
+    undefined -> {error, ended};
+    _Task -> Player
+  end.
+
+task(Player) -> {ok, bo_task:describe(bo_players:task(Player))}.
+
+test(Player, Solution) ->
+  case bo_task:test(bo_players:task(Player), Solution) of
+    ok -> advance(Player);
+    NOK -> NOK
+  end.
+
+advance(Player) ->
   NewPlayer = bo_players_repo:advance(Player),
   case bo_players:task(NewPlayer) of
     undefined -> the_end;

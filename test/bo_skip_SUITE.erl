@@ -1,4 +1,4 @@
--module(bo_valid_SUITE).
+-module(bo_skip_SUITE).
 -author('elbrujohalcon@inaka.net').
 
 -export([all/0]).
@@ -25,7 +25,7 @@ init_per_suite(Config) ->
     beam_olympics, all_tasks, [bo_first_task, simple_task1, simple_task2]),
   {ok, _} = bo:start(),
   _ = sumo:delete_all(bo_players),
-  {ok, Client} = bo_test_client:start(valid_suite),
+  {ok, Client} = bo_test_client:start(skip_suite),
   [{client, Client} | Config].
 
 -spec end_per_suite(config()) -> config().
@@ -42,9 +42,9 @@ next_task(Config) ->
   {client, Client} = lists:keyfind(client, 1, Config),
   {ok, FirstTask} = bo_test_client:signup(Client, <<"next_task">>),
 
-  ct:comment("The initial task can be solved"),
+  ct:comment("The initial task can be skipped"),
   #{name := bo_first_task} = FirstTask,
-  {ok, NextTask} = bo_test_client:submit(Client, <<"next_task">>, fun id/1),
+  {ok, NextTask} = bo_test_client:skip(Client, <<"next_task">>),
 
   ct:comment("A new task is provided"),
   case NextTask of
@@ -64,10 +64,9 @@ next_task_is_random(Config) ->
     lists:usort([bo_test_client:signup(Client, Player) || Player <- Players]),
   #{name := bo_first_task} = FirstTask,
 
-  ct:comment("Every player can solve that task"),
+  ct:comment("Every player can skip that task"),
   [{ok, NextTask1}, {ok, NextTask2}] =
-    lists:usort(
-      [bo_test_client:submit(Client, Player, fun id/1) || Player <- Players]),
+    lists:usort([bo_test_client:skip(Client, Player) || Player <- Players]),
 
   ct:comment("Tasks come from the list"),
   case {NextTask1, NextTask2} of
@@ -84,32 +83,25 @@ no_more_tasks(Config) ->
   {client, Client} = lists:keyfind(client, 1, Config),
   {ok, FirstTask} = bo_test_client:signup(Client, <<"nmt">>),
 
-  ct:comment("The initial task can be solved"),
+  ct:comment("The initial task can be skipped"),
   #{name := bo_first_task} = FirstTask,
-  {ok, #{name := NextTask}} =
-    bo_test_client:submit(Client, <<"nmt">>, fun id/1),
+  {ok, #{name := NextTask}} = bo_test_client:skip(Client, <<"nmt">>),
 
-  ct:comment("The next task can be solved"),
+  ct:comment("The next task can be skipped"),
   ExpectedTask =
     case NextTask of
       simple_task1 -> simple_task2;
       simple_task2 -> simple_task1
     end,
-  {ok, #{name := ExpectedTask}} =
-    bo_test_client:submit(Client, <<"nmt">>, fun NextTask:solution/1),
+  {ok, #{name := ExpectedTask}} = bo_test_client:skip(Client, <<"nmt">>),
 
   ct:comment("Solving the final task user gets the end message"),
-  the_end =
-    bo_test_client:submit(Client, <<"nmt">>, fun ExpectedTask:solution/1),
+  the_end = bo_test_client:skip(Client, <<"nmt">>),
 
   ct:comment("Once finished, the player task is undefined"),
   {error, ended} = bo_test_client:task(Client, <<"nmt">>),
 
-  ct:comment("Once finished, the player can't submit new solutions"),
-  {error, ended} = bo_test_client:submit(Client, <<"nmt">>, fun id/1),
+  ct:comment("Once finished, the player can't skip tasks"),
+  {error, ended} = bo_test_client:skip(Client, <<"nmt">>),
 
   {comment, ""}.
-
-id(X) ->
-  ct:log("id evaluated for ~p", [X]),
-  X.
