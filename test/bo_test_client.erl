@@ -1,7 +1,7 @@
 -module(bo_test_client).
 
 -export([start/1, stop/1]).
--export([signup/2, task/2, submit/3]).
+-export([signup/2, task/2, submit/3, skip/2]).
 -export([gen_call/2]).
 
 -type task() :: bo_task:task().
@@ -29,10 +29,12 @@ signup(Node, Player) -> call(Node, {signup, Player}).
 task(Node, Player) -> call(Node, {task, Player}).
 
 -spec submit(node(), player_name(), term()) ->
-    {ok, bo_task:task()} | the_end
-  | {error, invalid | timeout | forbidden | notfound}
-  | {failures, [term()]}.
+    {ok, bo_task:task()} | the_end | {error, term()} | {failures, [term()]}.
 submit(Node, Player, Solution) -> call(Node, {submit, Player, Solution}).
+
+-spec skip(node(), player_name()) ->
+    {ok, bo_task:task()} | the_end | {error, term()}.
+skip(Node, Player) -> call(Node, {skip, Player}).
 
 call(Node, Msg) ->
   Caller = self(),
