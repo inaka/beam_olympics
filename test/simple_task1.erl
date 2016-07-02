@@ -2,13 +2,22 @@
 
 -behaviour(bo_task).
 
--export([description/0, expected_arity/0, timeout/0, tests/0, solution/1]).
+-export([ description/0
+        , expected_arity/0
+        , score/0
+        , timeout/0
+        , tests/0
+        , solution/1
+        ]).
 
 -spec description() -> binary().
 description() -> <<"Echo: Always return 1">>.
 
 -spec expected_arity() -> 1.
 expected_arity() -> 1.
+
+-spec score() -> 100.
+score() -> 100.
 
 -spec timeout() -> 1000.
 timeout() -> 1000.

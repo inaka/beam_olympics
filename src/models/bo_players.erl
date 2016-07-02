@@ -3,17 +3,24 @@
 -behaviour(sumo_doc).
 
 -type name() :: binary().
+-type action() :: skip | solve.
+
+-type done_task() ::
+  #{ task := module()
+   , action := action()
+   }.
 
 -opaque player() ::
   #{ name := name()
    , node := node()
    , task := module() | undefined
-   , done := [module()]
+   , done := [done_task()]
    , created_at => calendar:datetime()
    }.
 
 -export_type(
   [ name/0
+  , action/0
   , player/0
   ]).
 
@@ -29,8 +36,9 @@
   , node/1
   , task/1
   , done/1
-  , finish/1
-  , task/2
+  , score/1
+  , finish/2
+  , task/3
   ]).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -73,14 +81,24 @@ node(#{node := Node}) -> Node.
 task(#{task := Task}) -> Task.
 
 -spec done(player()) -> [module()].
-done(#{done := Done}) -> Done.
+done(#{done := Done}) -> [Task || #{task := Task} <- Done].
 
--spec finish(player()) -> player().
-finish(Player) ->
-  #{task := Task, done := Done} = Player,
-  Player#{task := undefined, done := [Task|Done]}.
+-spec score(player()) -> integer().
+score(#{done := Done}) -> lists:sum(lists:map(fun do_score/1, Done)).
 
--spec task(player(), module()) -> player().
-task(Player, NextTask) ->
+-spec finish(player(), action()) -> player().
+finish(Player, Action) ->
   #{task := Task, done := Done} = Player,
-  Player#{task := NextTask, done := [Task|Done]}.
+  DoneTask = #{task => Task, action => Action},
+  Player#{task := undefined, done := [DoneTask|Done]}.
+
+-spec task(player(), action(), module()) -> player().
+task(Player, Action, NextTask) ->
+  #{task := Task, done := Done} = Player,
+  DoneTask = #{task => Task, action => Action},
+  Player#{task := NextTask, done := [DoneTask|Done]}.
+
+do_score(#{task := Task, action := skip}) ->
+  round(-0.5 * bo_task:score(Task));
+do_score(#{task := Task, action := solve}) ->
+  bo_task:score(Task).
