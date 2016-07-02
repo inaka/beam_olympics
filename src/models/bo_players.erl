@@ -5,6 +5,12 @@
 -type name() :: binary().
 -type action() :: skip | solve.
 
+-type stats() ::
+  #{ name := name()
+   , done := non_neg_integer()
+   , score := integer()
+   }.
+
 -type done_task() ::
   #{ task := module()
    , action := action()
@@ -21,6 +27,7 @@
 -export_type(
   [ name/0
   , action/0
+  , stats/0
   , player/0
   ]).
 
@@ -37,6 +44,7 @@
   , task/1
   , done/1
   , score/1
+  , stats/1
   , finish/2
   , task/3
   ]).
@@ -85,6 +93,13 @@ done(#{done := Done}) -> [Task || #{task := Task} <- Done].
 
 -spec score(player()) -> integer().
 score(#{done := Done}) -> lists:sum(lists:map(fun do_score/1, Done)).
+
+-spec stats(player()) -> stats().
+stats(#{name := Name, done := Done} = Player) ->
+  #{ name  => Name
+   , done  => length(Done)
+   , score => score(Player)
+   }.
 
 -spec finish(player(), action()) -> player().
 finish(Player, Action) ->

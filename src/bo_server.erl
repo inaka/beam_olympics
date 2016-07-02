@@ -31,6 +31,8 @@ start_link() ->
 init(noargs) -> {ok, #{}}.
 
 -spec handle_call
+  (stats, {pid(), term()}, state()) ->
+    {reply, bo_players_repo:stats(), state()};
   ({signup, bo_players:name()}, {pid(), term()}, state()) ->
     {reply, {ok, bo_task:task()} | {error, conflict}, state()};
   ({task, bo_players:name()}, {pid(), term()}, state()) ->
@@ -45,6 +47,8 @@ init(noargs) -> {ok, #{}}.
   ({skip, bo_players:name()}, {pid(), term()}, state()) ->
     {reply, {ok, bo_task:task()} | the_end
           | {error, ended | forbidden | notfound}, state()}.
+handle_call(stats, _From, State) ->
+  {reply, bo_players_repo:stats(), State};
 handle_call({signup, PlayerName}, {From, _}, State) ->
   Node = node(From),
   try bo_players_repo:signup(PlayerName, Node) of
