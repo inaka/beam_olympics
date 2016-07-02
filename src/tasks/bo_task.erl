@@ -4,7 +4,6 @@
 
 -type task() :: #{ name := module()
                  , desc := binary()
-                 , time := pos_integer()
                  }.
 
 -type test() :: fun((fun()) -> ok | {error, term()}).
@@ -22,7 +21,6 @@
 describe(Task) ->
   #{ name => Task
    , desc => Task:description()
-   , time => Task:timeout()
    }.
 
 -spec test(module(), fun()) -> result().

@@ -34,15 +34,16 @@ init(noargs) -> {ok, #{}}.
   ({signup, bo_players:name()}, {pid(), term()}, state()) ->
     {reply, {ok, bo_task:task()} | {error, conflict}, state()};
   ({task, bo_players:name()}, {pid(), term()}, state()) ->
-    {reply, {ok, bo_task:task()} | {error, forbidden | notfound}, state()};
+    {reply, {ok, bo_task:task()}
+          | {error, ended | forbidden | notfound}, state()};
   ({submit, bo_players:name(), term()}, {pid(), term()}, state()) ->
     {reply, {ok, bo_task:task()} | the_end
-          | {error, invalid | timeout | forbidden | notfound}
+          | {error, invalid | timeout | ended | forbidden | notfound}
           | {failures, [term()]}, state()}.
 handle_call({signup, PlayerName}, {From, _}, State) ->
   Node = node(From),
   try bo_players_repo:signup(PlayerName, Node) of
-    Player -> {reply, {ok, task(Player)}, State}
+    Player -> {reply, task(Player), State}
   catch
     _:conflict -> {reply, {error, conflict}, State}
   end;
@@ -52,7 +53,7 @@ handle_call({task, PlayerName}, {From, _}, State) ->
     notfound -> {reply, {error, notfound}, State};
     Player ->
       case bo_players:node(Player) of
-        Node -> {reply, {ok, task(Player)}, State};
+        Node -> {reply, task(Player), State};
         NotNode ->
           error_logger:warning_msg(
             "~p trying to access from ~p but registered at ~p",
@@ -91,12 +92,20 @@ handle_info(_, State) -> {noreply, State}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Internals
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-task(Player) -> bo_task:describe(bo_players:task(Player)).
+task(Player) ->
+  case bo_players:task(Player) of
+    undefined -> {error, ended};
+    Task -> {ok, bo_task:describe(Task)}
+  end.
 
 test(Player, Solution) ->
-  case bo_task:test(bo_players:task(Player), Solution) of
-    ok -> next_task(Player);
-    NOK -> NOK
+  case bo_players:task(Player) of
+    undefined -> {error, ended};
+    Task ->
+      case bo_task:test(Task, Solution) of
+        ok -> next_task(Player);
+        NOK -> NOK
+      end
   end.
 
 next_task(Player) ->

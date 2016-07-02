@@ -29,9 +29,7 @@ signup(Node, Player) -> call(Node, {signup, Player}).
 task(Node, Player) -> call(Node, {task, Player}).
 
 -spec submit(node(), player_name(), term()) ->
-    {ok, bo_task:task()} | the_end
-  | {error, invalid | timeout | forbidden | notfound}
-  | {failures, [term()]}.
+    {ok, bo_task:task()} | the_end | {error, term()} | {failures, [term()]}.
 submit(Node, Player, Solution) -> call(Node, {submit, Player, Solution}).
 
 call(Node, Msg) ->

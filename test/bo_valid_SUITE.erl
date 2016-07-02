@@ -102,6 +102,12 @@ no_more_tasks(Config) ->
   the_end =
     bo_test_client:submit(Client, <<"nmt">>, fun ExpectedTask:solution/1),
 
+  ct:comment("Once finished, the player task is undefined"),
+  {error, ended} = bo_test_client:task(Client, <<"nmt">>),
+
+  ct:comment("Once finished, the player can't submit new solutions"),
+  {error, ended} = bo_test_client:submit(Client, <<"nmt">>, fun id/1),
+
   {comment, ""}.
 
 id(X) ->
