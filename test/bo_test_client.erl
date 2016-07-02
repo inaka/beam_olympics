@@ -1,7 +1,7 @@
 -module(bo_test_client).
 
 -export([start/1, stop/1]).
--export([signup/2, task/2, submit/3, skip/2, score/2]).
+-export([signup/2, task/2, submit/3, skip/2, score/2, stats/1]).
 -export([gen_call/2]).
 
 -type task() :: bo_task:task().
@@ -38,6 +38,9 @@ skip(Node, Player) -> call(Node, {skip, Player}).
 
 -spec score(node(), player_name()) -> {ok, integer()} | {error, term()}.
 score(Node, Player) -> call(Node, {score, Player}).
+
+-spec stats(node()) -> bo_players_repo:stats().
+stats(Node) -> call(Node, stats).
 
 call(Node, Msg) ->
   Caller = self(),

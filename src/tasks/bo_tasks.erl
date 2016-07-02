@@ -3,7 +3,7 @@
 -export([first/0, all/0]).
 
 -spec first() -> module().
-first() -> application:get_env(beam_olympics, first_task, bo_first_task).
+first() -> application:get_env(beam_olympics, first_task, hd(all())).
 
 %% @todo dynamically compute DefaultList
 -spec all() -> [module()].

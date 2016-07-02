@@ -25,7 +25,7 @@ init_per_suite(Config) ->
     beam_olympics, all_tasks, [bo_first_task, simple_task1, simple_task2]),
   {ok, _} = bo:start(),
   _ = sumo:delete_all(bo_players),
-  {ok, Client} = bo_test_client:start(skip_suite),
+  {ok, Client} = bo_test_client:start(score_suite),
   [{client, Client} | Config].
 
 -spec end_per_suite(config()) -> config().
