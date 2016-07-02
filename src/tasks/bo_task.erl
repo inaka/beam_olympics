@@ -4,6 +4,7 @@
 
 -type task() :: #{ name := module()
                  , desc := binary()
+                 , score := pos_integer()
                  }.
 
 -type test() :: fun((fun()) -> ok | {error, term()}).
@@ -14,14 +15,19 @@
 -callback expected_arity() -> non_neg_integer().
 -callback timeout() -> pos_integer().
 -callback tests() -> [test()].
+-callback score() -> pos_integer().
 
--export([describe/1, test/2]).
+-export([describe/1, test/2, score/1]).
 
 -spec describe(module()) -> bo_task:task().
 describe(Task) ->
   #{ name => Task
    , desc => Task:description()
+   , score => Task:score()
    }.
+
+-spec score(module()) -> pos_integer().
+score(Task) -> Task:score().
 
 -spec test(module(), fun()) -> result().
 test(Task, Fun) ->

@@ -54,13 +54,17 @@ invalid_user(Config) ->
 
   ct:comment("Providing a wrong user fails"),
   {error, notfound} = bo_test_client:submit(Client, <<"wrong">>, solution),
+  {error, notfound} = bo_test_client:score(Client, <<"wrong">>),
+  {error, notfound} = bo_test_client:skip(Client, <<"wrong">>),
 
   ct:comment("Providing a wrong node is forbidden"),
   {ok, Client2} = bo_test_client:start(invalid_node),
 
   {error, forbidden} =
     try
-      bo_test_client:submit(Client2, player(), solution)
+      {error, forbidden} = bo_test_client:submit(Client2, player(), solution),
+      {error, forbidden} = bo_test_client:score(Client2, player()),
+      bo_test_client:skip(Client2, player())
     after
       bo_test_client:stop(Client2)
     end,

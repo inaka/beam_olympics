@@ -36,6 +36,8 @@ init(noargs) -> {ok, #{}}.
   ({task, bo_players:name()}, {pid(), term()}, state()) ->
     {reply, {ok, bo_task:task()}
           | {error, ended | forbidden | notfound}, state()};
+  ({score, bo_players:name()}, {pid(), term()}, state()) ->
+    {reply, {ok, integer()} | {error, forbidden | notfound}, state()};
   ({submit, bo_players:name(), term()}, {pid(), term()}, state()) ->
     {reply, {ok, bo_task:task()} | the_end
           | {error, invalid | timeout | ended | forbidden | notfound}
@@ -51,19 +53,24 @@ handle_call({signup, PlayerName}, {From, _}, State) ->
     _:conflict -> {reply, {error, conflict}, State}
   end;
 handle_call({task, PlayerName}, {From, _}, State) ->
-  case check_player(PlayerName, From) of
+  case check_player_and_task(PlayerName, From) of
     {error, Error} -> {reply, {error, Error}, State};
     Player -> {reply, task(Player), State}
   end;
-handle_call({submit, PlayerName, Solution}, {From, _}, State) ->
+handle_call({score, PlayerName}, {From, _}, State) ->
   case check_player(PlayerName, From) of
+    {error, Error} -> {reply, {error, Error}, State};
+    Player -> {reply, {ok, bo_players:score(Player)}, State}
+  end;
+handle_call({submit, PlayerName, Solution}, {From, _}, State) ->
+  case check_player_and_task(PlayerName, From) of
     {error, Error} -> {reply, {error, Error}, State};
     Player -> {reply, test(Player, Solution), State}
   end;
 handle_call({skip, PlayerName}, {From, _}, State) ->
-  case check_player(PlayerName, From) of
+  case check_player_and_task(PlayerName, From) of
     {error, Error} -> {reply, {error, Error}, State};
-    Player -> {reply, advance(Player), State}
+    Player -> {reply, advance(Player, skip), State}
   end.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -81,13 +88,19 @@ handle_info(_, State) -> {noreply, State}.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Internals
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+check_player_and_task(PlayerName, From) ->
+  case check_player(PlayerName, From) of
+    {error, Error} -> {error, Error};
+    Player -> check_task(Player)
+  end.
+
 check_player(PlayerName, From) ->
   Node = node(From),
   case bo_players_repo:fetch(PlayerName) of
     notfound -> {error, notfound};
     Player ->
       case bo_players:node(Player) of
-        Node -> check_task(Player);
+        Node -> Player;
         NotNode ->
           error_logger:warning_msg(
             "~p trying to access from ~p but registered at ~p",
@@ -106,12 +119,12 @@ task(Player) -> {ok, bo_task:describe(bo_players:task(Player))}.
 
 test(Player, Solution) ->
   case bo_task:test(bo_players:task(Player), Solution) of
-    ok -> advance(Player);
+    ok -> advance(Player, solve);
     NOK -> NOK
   end.
 
-advance(Player) ->
-  NewPlayer = bo_players_repo:advance(Player),
+advance(Player, Action) ->
+  NewPlayer = bo_players_repo:advance(Player, Action),
   case bo_players:task(NewPlayer) of
     undefined -> the_end;
     Task -> {ok, bo_task:describe(Task)}
