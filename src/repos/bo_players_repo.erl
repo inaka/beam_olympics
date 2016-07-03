@@ -1,6 +1,6 @@
 -module(bo_players_repo).
 
--export([signup/2, fetch/1, advance/2, stats/0]).
+-export([signup/2, fetch/1, advance/2, stats/0, test/2]).
 
 -type stats() ::
   #{ tasks := pos_integer()
@@ -43,3 +43,9 @@ stats() ->
   #{ tasks => length(bo_tasks:all())
    , players => SortedStats
    }.
+
+-spec test(bo_players:player(), bo_tasks:solution()) -> bo_task:result().
+test(Player, Solution) ->
+  Task = bo_players:task(Player),
+  Node = bo_players:node(Player),
+  bo_task:test(Task, Solution, Node).

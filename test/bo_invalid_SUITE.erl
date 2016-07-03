@@ -95,7 +95,6 @@ test_error(Config) ->
 
   ct:comment("Providing a function that errors the tests returns errors"),
   {failures, Failures} = submit(Client, fun(X) -> X / 2 end),
-
   [_|_] = [Err || #{error := Err, stack := _} <- Failures],
 
   {comment, ""}.

@@ -3,7 +3,7 @@
 -behaviour(bo_task).
 
 -export([ description/0
-        , expected_arity/0
+        , spec/0
         , score/0
         , timeout/0
         , tests/0
@@ -11,10 +11,10 @@
         ]).
 
 -spec description() -> binary().
-description() -> <<"Echo: Always return 2">>.
+description() -> <<"Always return 2">>.
 
--spec expected_arity() -> 1.
-expected_arity() -> 1.
+-spec spec() -> bo_task:spec().
+spec() -> #{input => [<<"_">>], output => <<"2">>}.
 
 -spec score() -> 200.
 score() -> 200.
