@@ -13,6 +13,8 @@
         , code_change/3
         ]).
 
+-export([test/3]).
+
 -type state() :: #{}.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -66,10 +68,12 @@ handle_call({score, PlayerName}, {From, _}, State) ->
     {error, Error} -> {reply, {error, Error}, State};
     Player -> {reply, {ok, bo_players:score(Player)}, State}
   end;
-handle_call({submit, PlayerName, Solution}, {From, _}, State) ->
+handle_call({submit, PlayerName, Solution}, {From, _} = Caller, State) ->
   case check_player_and_task(PlayerName, From) of
     {error, Error} -> {reply, {error, Error}, State};
-    Player -> {reply, test(Player, Solution), State}
+    Player ->
+      cxy_ctl:execute_task(bo, ?MODULE, test, [Caller, Player, Solution]),
+      {noreply, State}
   end;
 handle_call({skip, PlayerName}, {From, _}, State) ->
   case check_player_and_task(PlayerName, From) of
@@ -88,6 +92,19 @@ terminate(_Reason, _State) -> ok.
 code_change(_OldVsn, State, _Extra) -> {ok, State}.
 -spec handle_info(_, state()) -> {noreply, state()}.
 handle_info(_, State) -> {noreply, State}.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Cxy Ctl Callbacks
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+-spec test({pid(), term()}, bo_players:player(), bo_task:solution()) -> ok.
+test(Caller, Player, Solution) ->
+  Reply =
+    case bo_players_repo:test(Player, Solution) of
+      ok -> advance(Player, solve);
+      NOK -> NOK
+    end,
+  _ = gen_server:reply(Caller, Reply),
+  ok.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Internals
@@ -120,12 +137,6 @@ check_task(Player) ->
   end.
 
 task(Player) -> {ok, bo_task:describe(bo_players:task(Player))}.
-
-test(Player, Solution) ->
-  case bo_players_repo:test(Player, Solution) of
-    ok -> advance(Player, solve);
-    NOK -> NOK
-  end.
 
 advance(Player, Action) ->
   NewPlayer = bo_players_repo:advance(Player, Action),
