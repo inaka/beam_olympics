@@ -13,7 +13,9 @@
   {modules, []},
   {mod, {bo, []}},
   {env, []},
-  {start_phases, [{create_schema, []}]},
+  {start_phases, [ {create_schema, []}
+                 , {cxy_ctl_setup, []}
+                 ]},
   {maintainers, ["Inaka"]},
   {licenses, ["Apache 2.0"]},
   {links, [ {"Github", "https://github.com/inaka/beam_olympics"}

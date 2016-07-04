@@ -36,6 +36,9 @@ stop([]) -> ok.
 %% @private
 -spec start_phase(atom(), StartType::application:start_type(), []) ->
   ok | {error, _}.
+start_phase(cxy_ctl_setup, _StartType, []) ->
+  true = cxy_ctl:init([{bo, unlimited, 1000, 100000}]),
+  ok;
 start_phase(create_schema, _StartType, []) ->
   _ = application:stop(mnesia),
   Node = node(),
