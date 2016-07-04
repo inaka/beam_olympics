@@ -122,7 +122,7 @@ check_task(Player) ->
 task(Player) -> {ok, bo_task:describe(bo_players:task(Player))}.
 
 test(Player, Solution) ->
-  case bo_task:test(bo_players:task(Player), Solution) of
+  case bo_players_repo:test(Player, Solution) of
     ok -> advance(Player, solve);
     NOK -> NOK
   end.
