@@ -8,5 +8,5 @@ first() -> application:get_env(beam_olympics, first_task, hd(all())).
 %% @todo dynamically compute DefaultList
 -spec all() -> [module()].
 all() ->
-  DefaultList = [bo_first_task, bo_romans],
+  DefaultList = [bo_first_task, bo_romans, bo_henchmen],
   application:get_env(beam_olympics, all_tasks, DefaultList).
