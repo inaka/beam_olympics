@@ -45,7 +45,7 @@ init(noargs) -> {ok, #{}}.
   ({submit, bo_players:name(), term()}, {pid(), term()}, state()) ->
     {reply, {ok, bo_task:task()} | the_end
           | {error, invalid | timeout | ended | forbidden | notfound}
-          | {failures, [term()]}, state()};
+          | {failures, [term(), ...]}, state()};
   ({skip, bo_players:name()}, {pid(), term()}, state()) ->
     {reply, {ok, bo_task:task()} | the_end
           | {error, ended | forbidden | notfound}, state()}.
