@@ -8,7 +8,8 @@
     stdlib,
     sasl,
     mnesia,
-    sumo_db
+    sumo_db,
+    epocxy
   ]},
   {modules, []},
   {mod, {bo, []}},
