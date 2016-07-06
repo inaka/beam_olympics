@@ -8,8 +8,9 @@
 description() ->
   <<"Awesomeness Factor: Measure the awesomeness of things.\n"
     "You should write a function (let's call it Aw) "
-    "that measures how awesome any Erlang term is\n"
+    "that measures how awesome any Erlang term is.\n"
     "The rules are:\n"
+    "  - higher output means more awesomeness\n"
     "  - chuck_norris is the most awesome thing ever\n"
     "  - the awesomeness of a thing should not vary over time\n"
     "  - noone at inaka should known about this function. If an inako is\n"
