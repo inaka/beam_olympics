@@ -45,20 +45,21 @@ test(Task, Fun, Node) ->
     true ->
       ok = ensure_code(?MODULE, Node),
       ok = ensure_code(Task, Node),
-      case rpc:call(Node, ?MODULE, tester, [Task, Fun], Task:timeout()) of
+      case rpc:call(
+            Node, ?MODULE, tester, [Task:tests(), Fun], Task:timeout()) of
         {badrpc, Error} -> {error, Error};
         Result -> Result
       end
   end.
 
 -spec tester(module(), solution()) -> result().
-tester(Task, Fun) ->
-  case do_test(Task, Fun) of
+tester(Tests, Fun) ->
+  case do_test(Tests, Fun) of
     [] -> ok;
     Results -> {failures, Results}
   end.
 
-do_test(Task, Fun) ->
+do_test(Tests, Fun) ->
   lists:filtermap(
     fun(Test) ->
       try Test(Fun) of
@@ -68,7 +69,7 @@ do_test(Task, Fun) ->
         _:Exception ->
           {true, #{error => Exception, stack => erlang:get_stacktrace()}}
       end
-    end, Task:tests()).
+    end, Tests).
 
 ensure_code(Module, Node) ->
   {Module, Binary, Filename} = code:get_object_code(Module),
