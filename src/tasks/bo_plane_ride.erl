@@ -120,7 +120,7 @@ answer(Movies, Time, [{_, MovieTime} | Acc]) ->
     _ ->
       []
   end.
-  
+
 get_runtime(Playlist) ->
   lists:sum([proplists:get_value(Movie, get_movie_list()) ||
              Movie <- Playlist]).
