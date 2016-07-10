@@ -45,7 +45,7 @@ cases() ->
   [make_cases(0), make_cases(5), make_cases(32), make_cases(100)].
 
 make_cases(Length) ->
-  rand:seed(exs1024),
+  _ = rand:seed(exs1024),
   [make_case(100) || _ <- lists:seq(1, Length)].
 
 make_case(P) ->

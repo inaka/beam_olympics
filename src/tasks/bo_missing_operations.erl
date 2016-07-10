@@ -15,13 +15,16 @@ description() -> <<"Missing operations: You are tasked with finding the correct"
                    " '-' atoms) that will solve the equation.\n"
                    "For example, given ([2, 3, 1], 4) return ['+', '-'] because"
                    " 2 + 3 - 1 = 4. If there's no valid list of operators, just"
-                   " return an empty list.">>.
+                   " return the atom 'notfound'.">>.
 
 -spec spec() -> bo_task:spec().
-spec() -> #{input => [<<"X">>], output => <<"X">>}.
+spec() ->
+  #{ input => [<<"[pos_integer()]">>, <<"pos_integer()">>]
+   , output => <<"notfound | ['+', '-']">>
+   }.
 
--spec score() -> 10.
-score() -> 10.
+-spec score() -> 200.
+score() -> 200.
 
 -spec timeout() -> 1000.
 timeout() -> 1000.
@@ -29,32 +32,17 @@ timeout() -> 1000.
 -spec tests() -> [bo_task:test()].
 tests() -> [build_test(Case) || Case <- cases()].
 
-build_test(Case = {Operands, Solution}) ->
+build_test({Operands, Solution}) ->
   fun(Fun) ->
-    try erlang:apply(Fun, [Operands, Solution]) of
-      []     -> case answer(Operands, Solution) of
-                  [] -> ok;
-                  _  -> {error, #{ input => Case
-                                 , output => []
-                                 , expected => "Come on, there's a solution."}}
-                end;
-      Answer -> case test_result(['+' | Answer], Operands, 0) of
-                  bad_list ->
-                    {error, #{ input => Case
-                             , output => Answer
-                             , expected => "A list of the right length."}};
-                  bad_operator ->
-                    {error, #{ input => Case
-                             , output => Answer
-                             , expected => "A list with the right operators."}};
-                  Solution ->
-                    ok
-                end
+    try Fun(Operands, Solution) of
+      notfound -> check_impossible(Operands, Solution);
+      Answer -> check_answer(Operands, Solution, Answer)
     catch
       _:Error ->
-        {error, #{ input => Case
+        {error, #{ input => [Operands, Solution]
                  , output => Error
-                 , expected => "Not an error, that's for sure."}}
+                 , expected => <<"Not an error, that's for sure.">>}
+                 }
     end
   end.
 
@@ -77,6 +65,22 @@ make_case(Index) ->
       {L, rand:uniform(256)}
   end.
 
+check_answer(Operands, Solution, Answer) ->
+  case test_result(['+' | Answer], Operands, 0) of
+    bad_list ->
+      {error, #{ input => [Operands, Solution]
+               , output => Answer
+               , expected => <<"A list of the right length.">>
+               }};
+    bad_operator ->
+      {error, #{ input => [Operands, Solution]
+               , output => Answer
+               , expected => <<"A list with the right operators.">>
+               }};
+    Solution ->
+      ok
+  end.
+
 test_result(['+' | Operators], [H | T], Acc) ->
   test_result(Operators, T, Acc + H);
 test_result(['-' | Operators], [H | T], Acc) ->
@@ -90,15 +94,16 @@ test_result([], _Operands, _Acc) ->
 test_result(_Operators, [], _Acc) ->
   bad_list.
 
-answer(Operands, Solution) ->
+check_impossible(Operands, Solution) ->
   Combinations = get_operator_combinations(length(Operands) - 1),
   case lists:filter(fun(C) ->
                       Solution =:= test_result(['+' | C], Operands, 0)
                     end, Combinations) of
-    [] ->
-      [];
-    [H | _] ->
-      H
+    [] -> ok;
+    [_ | _] -> {error, #{ input => [Operands, Solution]
+                        , output => notfound
+                        , expected => <<"Come on, there's a solution.">>
+                        }}
   end.
 
 get_operator_combinations(1) ->

@@ -46,15 +46,15 @@ test(Task, Fun, Node) ->
       ok = ensure_code(?MODULE, Node),
       ok = ensure_code(Task, Node),
       case rpc:call(
-            Node, ?MODULE, tester, [Task:tests(), Fun], Task:timeout()) of
+            Node, ?MODULE, tester, [Task, Fun], Task:timeout()) of
         {badrpc, Error} -> {error, Error};
         Result -> Result
       end
   end.
 
 -spec tester(module(), solution()) -> result().
-tester(Tests, Fun) ->
-  case do_test(Tests, Fun) of
+tester(Task, Fun) ->
+  case do_test(Task:tests(), Fun) of
     [] -> ok;
     Results -> {failures, Results}
   end.

@@ -59,7 +59,7 @@ chuck_norris(Fun) ->
   Max = lists:max(Outputs),
   case Outputs of
     [Max | _] -> ok;
-    [_ | _] -> {error, <<"Chuck should be awesomer than", Inputs>>}
+    [_ | _] -> {error, {<<"Chuck should be awesomer than">>, Inputs}}
   end.
 
 constant_awesomeness(Fun) ->
