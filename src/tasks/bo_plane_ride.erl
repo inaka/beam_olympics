@@ -18,10 +18,13 @@ description() ->
     " movies. If no such playlist exists, return an empty list.">>.
 
 -spec spec() -> bo_task:spec().
-spec() -> #{input => [<<"X">>], output => <<"X">>}.
+spec() ->
+  #{ input => [<<"[{string(), pos_integer()}]">>, non_neg_integer()]
+   , output => <<"[string()]">>
+   }.
 
--spec score() -> 1.
-score() -> 1.
+-spec score() -> 250.
+score() -> 250.
 
 -spec timeout() -> 5000.
 timeout() -> 5000.

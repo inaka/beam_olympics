@@ -11,10 +11,10 @@
 description() -> <<"TupleStacking: How many tuples can you find in the list?">>.
 
 -spec spec() -> bo_task:spec().
-spec() -> #{input => [<<"X">>], output => <<"X">>}.
+spec() -> #{input => [<<"term()">>], output => <<"non_neg_integer()">>}.
 
--spec score() -> 10.
-score() -> 10.
+-spec score() -> 50.
+score() -> 50.
 
 -spec timeout() -> 1000.
 timeout() -> 1000.
@@ -29,12 +29,14 @@ build_test(Case) ->
       ProperAnswer -> ok;
       BadAnswer    -> {error, #{ input => Case
                                , output => BadAnswer
-                               , expected => ProperAnswer}}
+                               , expected => ProperAnswer
+                               }}
     catch
       _:Error ->
         {error, #{ input => Case
-                 , output => Error
-                 , expected => "Well, I was certainly not expecting an error."}}
+                 , error => Error
+                 , stack => erlang:get_stacktrace()
+                 }}
     end
   end.
 
