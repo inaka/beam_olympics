@@ -16,8 +16,8 @@ spec() -> #{input => [<<"term()">>], output => <<"non_neg_integer()">>}.
 -spec score() -> 50.
 score() -> 50.
 
--spec timeout() -> 1000.
-timeout() -> 1000.
+-spec timeout() -> 5000.
+timeout() -> 5000.
 
 -spec tests() -> [bo_task:test()].
 tests() -> [build_test(Case) || Case <- cases()].

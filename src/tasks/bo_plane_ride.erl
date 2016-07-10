@@ -19,7 +19,7 @@ description() ->
 
 -spec spec() -> bo_task:spec().
 spec() ->
-  #{ input => [<<"[{string(), pos_integer()}]">>, non_neg_integer()]
+  #{ input => [<<"[{string(), pos_integer()}]">>, <<"non_neg_integer()">>]
    , output => <<"[string()]">>
    }.
 
