@@ -53,7 +53,7 @@ cases() ->
   [make_case(N) || N <- lists:seq(1, 8)].
 
 make_case(Index) ->
-  L = [1 + rand:uniform(256) || _ <- lists:seq(1, 2 * Index)],
+  L = [rand:uniform(256) || _ <- lists:seq(1, 2 * Index)],
   case rand:uniform() < 0.5 of
     true ->
       Operators = [case rand:uniform() < 0.5 of
@@ -78,7 +78,16 @@ check_answer(Operands, Solution, Answer) ->
                , expected => <<"A list with the right operators.">>
                }};
     Solution ->
-      ok
+      ok;
+    Result ->
+      {error, #{ input => [Operands, Solution]
+               , output => Answer
+               , expected => { <<"A list of operators that result in">>
+                             , Solution
+                             , <<"not in">>
+                             , Result
+                             }
+               }}
   end.
 
 test_result(['+' | Operators], [H | T], Acc) ->
