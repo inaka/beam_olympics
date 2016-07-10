@@ -13,10 +13,10 @@ description() -> <<"Permusum: Write a function that receives an integer and"
                     " digits.">>.
 
 -spec spec() -> bo_task:spec().
-spec() -> #{input => [<<"X">>], output => <<"X">>}.
+spec() -> #{input => [<<"pos_integer()">>], output => <<"pos_integer()">>}.
 
 -spec score() -> 10.
-score() -> 10.
+score() -> 100.
 
 -spec timeout() -> 5000.
 timeout() -> 5000.
@@ -34,9 +34,11 @@ build_test({Number, Sum}) ->
                       }}
     catch
       _:Error ->
-        {error, #{input => Number,
-                  output => Error,
-                  expected => "Not an error, that's for sure ;)"}}
+        {error, #{ input => Number
+                 , output => Error
+                 , stack => erlang:get_stacktrace()
+                 , expected => <<"Not an error, that's for sure ;)">>
+                 }}
     end
   end.
 

@@ -14,5 +14,6 @@ all() ->
     , bo_henchmen
     , bo_awesomeness
     , bo_missing_operations
+    , bo_permutation_sum
     ],
   application:get_env(beam_olympics, all_tasks, DefaultList).
