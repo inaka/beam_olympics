@@ -23,8 +23,8 @@ spec() ->
    , output => <<"notfound | ['+', '-']">>
    }.
 
--spec score() -> 200.
-score() -> 200.
+-spec score() -> 250.
+score() -> 250.
 
 -spec timeout() -> 1000.
 timeout() -> 1000.
