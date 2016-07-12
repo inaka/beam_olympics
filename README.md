@@ -7,10 +7,13 @@ Let's find the fastest beamer!
 ## Introduction
 **BeamOlympics** is an Erlang app to help you check your Erlang-Fu. You can also play with friends in a local network.
 
-## Prerequisites
+## Compilation
+If you want to generate a release by hand, follow the steps below. If you would like to start with a pre-generated release, just download [the latest one](https://github.com/inaka/beam_olympics/releases) and jump to the [Start](#start) section below.
+
+### Prerequisites
 As stated in rebar.config, **BeamOlympics** server only compiles with Erlang/OTP19+.
 
-## Installation
+### Installation
 Before you can start playing, you have to install the **BeamOlympics** server.
 To do so, clone this repo and use [reba3](https://github.com/erlang/rebar3) to generate a release for it.
 
@@ -22,11 +25,13 @@ $ rebar3 release
 If needed, between those 2 steps you can change your node name in [vm.args](https://github.com/inaka/beam_olympics/blob/master/config/vm.args#L2) to your convenience.
 
 ## Start
-To start the **BeamOlympics** server you generated in the previous step, you run…
+To start the **BeamOlympics** server you you run…
 
 ```bash
-$ _build/default/rel/beam_olympics/bin/beam_olympics start
+$ $REL_PATH/beam_olympics/bin/beam_olympics start
 ```
+
+Whre `$REL_PATH` would be `_build/default/rel` if you just generated the release with rebar3 or `.` if you downloaded a pre-compiled release from github.
 
 That will boot up an Erlang node in your computer with the name specified by vm.args.
 
