@@ -1,6 +1,6 @@
 # BeamOlympics
 
-
+![Beam Olympics](https://s3.amazonaws.com/uploads.hipchat.com/15025/55900/LeqcbfiQzCN48Lb/Beam%20Olympics%20black.png)
 
 Let's find the fastest beamer!
 
