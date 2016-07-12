@@ -14,8 +14,8 @@ description() ->
 -spec spec() -> bo_task:spec().
 spec() -> #{input => [<<"binary()">>], output => <<"pos_integer()">>}.
 
--spec score() -> 200.
-score() -> 200.
+-spec score() -> 150.
+score() -> 150.
 
 -spec timeout() -> 5000.
 timeout() -> 5000.

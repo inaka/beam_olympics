@@ -162,7 +162,7 @@ gen_server:call(
 
 ```elixir
 GenServer.call(
-    {:bo_server, server_node}, {:signup, "Player"}, fn() -> :something end)
+    {:bo_server, server_node}, {:submit, "Player", fn() -> :something end})
 ```
 
 ----
@@ -177,7 +177,7 @@ Skips the current task.
 
 ##### Elixir Specs
 ```elixir
-{:submit, player_name, term} ::
+{:skip, player_name} ::
     {:ok, task} | :the_end | {:error, :ended | :forbidden | :notfound}
 ```
 

@@ -13,8 +13,8 @@ description() -> <<"TupleStacking: How many tuples can you find in the list?">>.
 -spec spec() -> bo_task:spec().
 spec() -> #{input => [<<"term()">>], output => <<"non_neg_integer()">>}.
 
--spec score() -> 50.
-score() -> 50.
+-spec score() -> 100.
+score() -> 100.
 
 -spec timeout() -> 5000.
 timeout() -> 5000.
