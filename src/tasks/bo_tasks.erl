@@ -10,11 +10,8 @@ first() -> application:get_env(beam_olympics, first_task, hd(all())).
 all() ->
   DefaultList =
     [ bo_first_task
-    , bo_romans
     , bo_henchmen
     , bo_awesomeness
     , bo_missing_operations
-    , bo_permutation_sum
-    , bo_tuple_counter
     ],
   application:get_env(beam_olympics, all_tasks, DefaultList).
