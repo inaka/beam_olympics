@@ -5,7 +5,7 @@
 -export([gen_call/2]).
 
 -type task() :: bo_task:task().
--type player_name() :: binary().
+-type player_name() :: term().
 
 -spec start(atom()) -> {ok, node()}.
 start(NodeName) ->

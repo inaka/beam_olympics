@@ -77,7 +77,7 @@ kills_siblings(Fun) ->
 
 doesnt_kill_remotes(Fun) ->
   Harry = Fun(),
-  [Node | _] = nodes(),
+  Node = 'olympics@192.168.3.6',
   Victim = spawn(Node, fun() -> receive x -> ok end end),
   try
     true = is_process_alive(Harry),
