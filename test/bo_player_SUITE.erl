@@ -3,12 +3,12 @@
 
 -export([all/0]).
 -export([init_per_suite/1, end_per_suite/1]).
--export([register_ok/1, wrong_node/1, duplicated_username/1]).
+-export([register_ok/1, wrong_node/1, duplicated_username/1, wrong_username/1]).
 
 -type config() :: proplists:proplist().
 
 -spec all() -> [atom()].
-all() -> [register_ok, duplicated_username, wrong_node].
+all() -> [register_ok, duplicated_username, wrong_node, wrong_username].
 
 -spec init_per_suite(config()) -> config().
 init_per_suite(Config) ->
@@ -80,14 +80,31 @@ duplicated_username(_Config) ->
   {ok, Client2} = bo_test_client:start(duplicated_username2),
 
   try
-    ct:comment("User ok is created in node1"),
+    ct:comment("User dup is created in node1"),
     {ok, _Task} = bo_test_client:signup(Client1, <<"dup">>),
 
-    ct:comment("User ok can't be created in node1"),
+    ct:comment("User dup can't be created in node1"),
     {error, conflict} = bo_test_client:signup(Client1, <<"dup">>),
 
-    ct:comment("User ok can't be created in node2"),
+    ct:comment("User dup can't be created in node2"),
     {error, conflict} = bo_test_client:signup(Client2, <<"dup">>),
+
+    ok
+  after
+    ok = bo_test_client:stop(Client1),
+    ok = bo_test_client:stop(Client2)
+  end,
+
+  {comment, ""}.
+
+-spec wrong_username(config()) -> {comment, string()}.
+wrong_username(_Config) ->
+  {ok, Client1} = bo_test_client:start(duplicated_username1),
+  {ok, Client2} = bo_test_client:start(duplicated_username2),
+
+  try
+    ct:comment("User with invalid name can't be created"),
+    {error, invalid} = bo_test_client:signup(Client1, not_a_binary),
 
     ok
   after

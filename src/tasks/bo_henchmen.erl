@@ -78,7 +78,7 @@ kills_siblings(Fun) ->
 doesnt_kill_remotes(Fun) ->
   Harry = Fun(),
   [Node | _] = nodes(),
-  Victim = spawn(Node, fun() -> receive x -> ok end end),
+  Victim = spawn(Node, timer, sleep, [3000]),
   try
     true = is_process_alive(Harry),
     true = rpc:pinfo(Victim) /= undefined,

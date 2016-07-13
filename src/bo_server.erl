@@ -35,7 +35,7 @@ init(noargs) -> {ok, #{}}.
 -spec handle_call
   (stats, {pid(), term()}, state()) ->
     {reply, bo_players_repo:stats(), state()};
-  ({signup, bo_players:name()}, {pid(), term()}, state()) ->
+  ({signup, term()}, {pid(), term()}, state()) ->
     {reply, {ok, bo_task:task()} | {error, conflict}, state()};
   ({task, bo_players:name()}, {pid(), term()}, state()) ->
     {reply, {ok, bo_task:task()}
@@ -51,6 +51,8 @@ init(noargs) -> {ok, #{}}.
           | {error, ended | forbidden | notfound}, state()}.
 handle_call(stats, _From, State) ->
   {reply, bo_players_repo:stats(), State};
+handle_call({signup, Data}, _From, State) when not is_binary(Data) ->
+  {reply, {error, invalid}, State};
 handle_call({signup, PlayerName}, {From, _}, State) ->
   Node = node(From),
   try bo_players_repo:signup(PlayerName, Node) of
