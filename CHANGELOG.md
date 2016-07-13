@@ -1,18 +1,25 @@
 # Change Log
 
+## [1.0.1](https://github.com/inaka/beam_olympics/tree/1.0.1) (2016-07-13)
+[Full Changelog](https://github.com/inaka/beam_olympics/compare/1.0.0...1.0.1)
+
+**Fixed bugs:**
+
+- Invalid node on Henchmen test [\#31](https://github.com/inaka/beam_olympics/pull/31) ([elbrujohalcon](https://github.com/elbrujohalcon))
+- Invalid user input goes through [\#30](https://github.com/inaka/beam_olympics/pull/30) ([elbrujohalcon](https://github.com/elbrujohalcon))
+
 ## [1.0.0](https://github.com/inaka/beam_olympics/tree/1.0.0) (2016-07-12)
 **Closed issues:**
 
-- Make the Repo Public [\#24](https://github.com/inaka/beam_olympics/issues/24)
 - Get Current Task [\#11](https://github.com/inaka/beam_olympics/issues/11)
 - Basic game logic [\#5](https://github.com/inaka/beam_olympics/issues/5)
+- Make the Repo Public [\#24](https://github.com/inaka/beam_olympics/issues/24)
 
 **Merged pull requests:**
 
 - README pieces for Open-Source checklist [\#29](https://github.com/inaka/beam_olympics/pull/29) ([elbrujohalcon](https://github.com/elbrujohalcon))
 - Added 4 new tests [\#28](https://github.com/inaka/beam_olympics/pull/28) ([HernanRivasAcosta](https://github.com/HernanRivasAcosta))
 - Awesomeness [\#27](https://github.com/inaka/beam_olympics/pull/27) ([elbrujohalcon](https://github.com/elbrujohalcon))
-- Balance out the scores for each task [\#25](https://github.com/inaka/beam_olympics/pull/25) ([elbrujohalcon](https://github.com/elbrujohalcon))
 - \[\#problems\] Add henchmen task [\#23](https://github.com/inaka/beam_olympics/pull/23) ([elbrujohalcon](https://github.com/elbrujohalcon))
 - \[\#problems\] Add romans problem [\#22](https://github.com/inaka/beam_olympics/pull/22) ([elbrujohalcon](https://github.com/elbrujohalcon))
 - Documentation / Examples [\#20](https://github.com/inaka/beam_olympics/pull/20) ([elbrujohalcon](https://github.com/elbrujohalcon))
@@ -30,6 +37,8 @@
 - Meta Testing [\#4](https://github.com/inaka/beam_olympics/pull/4) ([elbrujohalcon](https://github.com/elbrujohalcon))
 - Basic App Setup [\#3](https://github.com/inaka/beam_olympics/pull/3) ([elbrujohalcon](https://github.com/elbrujohalcon))
 - Update LICENSE [\#1](https://github.com/inaka/beam_olympics/pull/1) ([elbrujohalcon](https://github.com/elbrujohalcon))
+- Balance out the scores for each task [\#25](https://github.com/inaka/beam_olympics/pull/25) ([elbrujohalcon](https://github.com/elbrujohalcon))
+- Generate a Release [\#21](https://github.com/inaka/beam_olympics/pull/21) ([elbrujohalcon](https://github.com/elbrujohalcon))
 
 
 
