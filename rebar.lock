@@ -1,8 +1,7 @@
-{"1.1.0",
 [{<<"eper">>,{pkg,<<"eper">>,<<"0.94.0">>},0},
  {<<"epocxy">>,
-  {git,"https://github.com/inaka/epocxy.git",
-       {ref,"2b6a7c482051e16d9f81a3aa7b0b99592963de93"}},
+  {git,"https://github.com/duomark/epocxy.git",
+       {ref,"84ebe00649bdc64dcb4b0e88984cc317057fc55b"}},
   0},
  {<<"goldrush">>,
   {git,"git://github.com/DeadZen/goldrush.git",
@@ -31,8 +30,4 @@
  {<<"worker_pool">>,
   {git,"https://github.com/inaka/worker_pool.git",
        {ref,"94fd1633413e553e5ee1f302b5ad23488510dd70"}},
-  1}]}.
-[
-{pkg_hash,[
- {<<"eper">>, <<"F5FB2DAA0DF8878748E1C598428EDA942A173E5121FF35C1D632129B84593A3A">>}]}
-].
+  1}].
