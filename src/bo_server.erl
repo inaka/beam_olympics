@@ -30,7 +30,8 @@ start_link() ->
 %%% Callback implementation
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 -spec init(noargs) -> {ok, state()}.
-init(noargs) -> {ok, #{}}.
+init(noargs) ->
+  {ok, #{}}.
 
 -spec handle_call
   (stats, {pid(), term()}, state()) ->
@@ -74,13 +75,14 @@ handle_call({submit, PlayerName, Solution}, {From, _} = Caller, State) ->
   case check_player_and_task(PlayerName, From) of
     {error, Error} -> {reply, {error, Error}, State};
     Player ->
-      cxy_ctl:execute_task(bo, ?MODULE, test, [Caller, Player, Solution]),
+      ok = cxy_ctl:execute_task(bo, ?MODULE, test, [Caller, Player, Solution]),
       {noreply, State}
   end;
 handle_call({skip, PlayerName}, {From, _}, State) ->
   case check_player_and_task(PlayerName, From) of
     {error, Error} -> {reply, {error, Error}, State};
-    Player -> {reply, advance(Player, skip), State}
+    Player -> ok = bo_hooks:execute(player_skipped_task, [PlayerName]),
+              {reply, advance(Player, skip), State}
   end.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

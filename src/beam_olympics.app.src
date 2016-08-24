@@ -16,6 +16,7 @@
   {env, []},
   {start_phases, [ {create_schema, []}
                  , {cxy_ctl_setup, []}
+                 , {app_start_hook, []}
                  ]},
   {maintainers, ["Inaka"]},
   {licenses, ["Apache 2.0"]},
