@@ -18,12 +18,12 @@ init_per_suite(Config) ->
     {error, Error} -> throw(Error)
   end,
   {ok, _} = bo:start(),
-  _ = sumo:delete_all(bo_players),
+  _ = sumo:delete_all(players),
   Config.
 
 -spec end_per_suite(config()) -> config().
 end_per_suite(Config) ->
-  _ = sumo:delete_all(bo_players),
+  _ = sumo:delete_all(players),
   ok = bo:stop(),
   Config.
 

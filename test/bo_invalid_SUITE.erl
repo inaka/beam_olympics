@@ -23,7 +23,7 @@ init_per_suite(Config) ->
     {error, Error} -> throw(Error)
   end,
   {ok, _} = bo:start(),
-  _ = sumo:delete_all(bo_players),
+  _ = sumo:delete_all(players),
   {ok, Client} = bo_test_client:start(invalid_suite),
   {ok, _Task} = bo_test_client:signup(Client, player()),
   [{client, Client} | Config].
@@ -32,7 +32,7 @@ init_per_suite(Config) ->
 end_per_suite(Config) ->
   {client, Client} = lists:keyfind(client, 1, Config),
   ok = bo_test_client:stop(Client),
-  _ = sumo:delete_all(bo_players),
+  _ = sumo:delete_all(players),
   ok = bo:stop(),
   Config.
 

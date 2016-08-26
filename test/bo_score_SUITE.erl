@@ -24,7 +24,7 @@ init_per_suite(Config) ->
   application:set_env(
     beam_olympics, all_tasks, [bo_first_task, simple_task1, simple_task2]),
   {ok, _} = bo:start(),
-  _ = sumo:delete_all(bo_players),
+  _ = sumo:delete_all(players),
   {ok, Client} = bo_test_client:start(score_suite),
   [{client, Client} | Config].
 
@@ -32,7 +32,7 @@ init_per_suite(Config) ->
 end_per_suite(Config) ->
   {client, Client} = lists:keyfind(client, 1, Config),
   ok = bo_test_client:stop(Client),
-  _ = sumo:delete_all(bo_players),
+  _ = sumo:delete_all(players),
   application:unset_env(beam_olympics, all_tasks),
   ok = bo:stop(),
   Config.

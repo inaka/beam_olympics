@@ -56,7 +56,7 @@
 -spec sumo_schema() -> sumo:schema().
 sumo_schema() ->
   sumo:new_schema(
-    ?MODULE,
+    players,
     [ sumo:new_field(name, string, [id, unique])
     , sumo:new_field(node, custom, [not_null])
     , sumo:new_field(task, custom, [])
@@ -64,7 +64,7 @@ sumo_schema() ->
     , sumo:new_field(created_at, datetime, [not_null])
     ]).
 
--spec sumo_sleep(player()) -> sumo:doc().
+-spec sumo_sleep(player()) -> sumo:model().
 sumo_sleep(Player) -> Player.
 
 -spec sumo_wakeup(sumo:doc()) -> player().
