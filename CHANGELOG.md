@@ -1,10 +1,22 @@
 # Change Log
 
+## [1.1.1](https://github.com/inaka/beam_olympics/tree/1.1.1) (2016-08-26)
+[Full Changelog](https://github.com/inaka/beam_olympics/compare/1.1.0...1.1.1)
+
+**Closed issues:**
+
+- Move from erlang.mk to rebar3 [\#40](https://github.com/inaka/beam_olympics/issues/40)
+
+**Merged pull requests:**
+
+- \[Close \#40\] given support to publish in hex.pm and sumo\_db 0.6.1 [\#42](https://github.com/inaka/beam_olympics/pull/42) ([Euen](https://github.com/Euen))
+
 ## [1.1.0](https://github.com/inaka/beam_olympics/tree/1.1.0) (2016-08-25)
 [Full Changelog](https://github.com/inaka/beam_olympics/compare/1.0.2...1.1.0)
 
 **Merged pull requests:**
 
+- Version bump [\#41](https://github.com/inaka/beam_olympics/pull/41) ([HernanRivasAcosta](https://github.com/HernanRivasAcosta))
 - Added the events system [\#39](https://github.com/inaka/beam_olympics/pull/39) ([HernanRivasAcosta](https://github.com/HernanRivasAcosta))
 
 ## [1.0.2](https://github.com/inaka/beam_olympics/tree/1.0.2) (2016-07-13)
