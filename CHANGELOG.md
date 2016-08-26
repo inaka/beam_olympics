@@ -1,12 +1,31 @@
 # Change Log
 
-## [1.0.1](https://github.com/inaka/beam_olympics/tree/1.0.1) (2016-07-13)
-[Full Changelog](https://github.com/inaka/beam_olympics/compare/1.0.0...1.0.1)
+## [1.1.0](https://github.com/inaka/beam_olympics/tree/1.1.0) (2016-08-25)
+[Full Changelog](https://github.com/inaka/beam_olympics/compare/1.0.2...1.1.0)
+
+**Merged pull requests:**
+
+- Added the events system [\#39](https://github.com/inaka/beam_olympics/pull/39) ([HernanRivasAcosta](https://github.com/HernanRivasAcosta))
+
+## [1.0.2](https://github.com/inaka/beam_olympics/tree/1.0.2) (2016-07-13)
+[Full Changelog](https://github.com/inaka/beam_olympics/compare/1.0.0...1.0.2)
 
 **Fixed bugs:**
 
 - Invalid node on Henchmen test [\#31](https://github.com/inaka/beam_olympics/pull/31) ([elbrujohalcon](https://github.com/elbrujohalcon))
 - Invalid user input goes through [\#30](https://github.com/inaka/beam_olympics/pull/30) ([elbrujohalcon](https://github.com/elbrujohalcon))
+
+**Closed issues:**
+
+- Version Bump to 1.0.2 [\#35](https://github.com/inaka/beam_olympics/issues/35)
+- Remove all private tasks [\#34](https://github.com/inaka/beam_olympics/issues/34)
+
+**Merged pull requests:**
+
+- Version bump [\#38](https://github.com/inaka/beam_olympics/pull/38) ([HernanRivasAcosta](https://github.com/HernanRivasAcosta))
+- Fixed some of the tasks [\#37](https://github.com/inaka/beam_olympics/pull/37) ([HernanRivasAcosta](https://github.com/HernanRivasAcosta))
+- Fixed some of the tasks [\#36](https://github.com/inaka/beam_olympics/pull/36) ([HernanRivasAcosta](https://github.com/HernanRivasAcosta))
+- Version Bump to 1.0.1 [\#32](https://github.com/inaka/beam_olympics/pull/32) ([elbrujohalcon](https://github.com/elbrujohalcon))
 
 ## [1.0.0](https://github.com/inaka/beam_olympics/tree/1.0.0) (2016-07-12)
 **Closed issues:**
