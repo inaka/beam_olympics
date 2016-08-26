@@ -21,13 +21,13 @@ init_per_suite(Config) ->
   end,
   ok = application:set_env(beam_olympics, hooks, get_hooks()),
   {ok, _} = bo:start(),
-  _ = sumo:delete_all(bo_players),
+  _ = sumo:delete_all(players),
   Config.
 
 -spec end_per_suite(config()) -> config().
 end_per_suite(Config) ->
   ok = application:unset_env(beam_olympics, hooks),
-  _ = sumo:delete_all(bo_players),
+  _ = sumo:delete_all(players),
   ok = bo:stop(),
   Config.
 
