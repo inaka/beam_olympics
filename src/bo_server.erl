@@ -57,7 +57,8 @@ handle_call({signup, Data}, _From, State) when not is_binary(Data) ->
 handle_call({signup, PlayerName}, {From, _}, State) ->
   Node = node(From),
   try bo_players_repo:signup(PlayerName, Node) of
-    Player -> {reply, task(Player), State}
+    Player -> ok = bo_hooks:execute(signedup, [Player]),
+              {reply, task(Player), State}
   catch
     _:conflict -> {reply, {error, conflict}, State}
   end;
@@ -81,8 +82,7 @@ handle_call({submit, PlayerName, Solution}, {From, _} = Caller, State) ->
 handle_call({skip, PlayerName}, {From, _}, State) ->
   case check_player_and_task(PlayerName, From) of
     {error, Error} -> {reply, {error, Error}, State};
-    Player -> ok = bo_hooks:execute(player_skipped_task, [PlayerName]),
-              {reply, advance(Player, skip), State}
+    Player -> {reply, advance(Player, skip), State}
   end.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -144,7 +144,9 @@ task(Player) -> {ok, bo_task:describe(bo_players:task(Player))}.
 
 advance(Player, Action) ->
   NewPlayer = bo_players_repo:advance(Player, Action),
+  ok = bo_hooks:execute(advanced, [Action, NewPlayer]),
   case bo_players:task(NewPlayer) of
-    undefined -> the_end;
+    undefined -> ok = bo_hooks:execute(finished, [NewPlayer]),
+                 the_end;
     Task -> {ok, bo_task:describe(Task)}
   end.

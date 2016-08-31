@@ -5,7 +5,7 @@
 -export([hooks/1]).
 
 %% Hooks
--export([start/0, skipped1/1, skipped2/1]).
+-export([start/0, advanced1/2, advanced2/2]).
 
 -type config() :: proplists:proplist().
 
@@ -41,7 +41,9 @@ hooks(_Config) ->
     {ok, _Task2} = bo_test_client:skip(Client, <<"userName">>),
 
     EtsContents = lists:sort(ets:tab2list(hooks_SUITE_ets)),
-    [{skipped1, <<"userName">>}, {skipped2, <<"userName">>}] = EtsContents,
+    [ {advanced1, skip, _}
+    , {advanced2, skip, _}
+    ] = EtsContents,
 
     ok
   after
@@ -58,16 +60,16 @@ start() ->
   % The table will be destroyed after 500ms no matter what
   timer:sleep(500).
 
--spec skipped1(any()) -> true.
-skipped1(PlayerName) ->
-  ets:insert(hooks_SUITE_ets, {skipped1, PlayerName}).
+-spec advanced1(any(), any()) -> true.
+advanced1(Event, Player) ->
+  ets:insert(hooks_SUITE_ets, {advanced1, Event, Player}).
 
--spec skipped2(any()) -> true.
-skipped2(PlayerName) ->
-  ets:insert(hooks_SUITE_ets, {skipped2, PlayerName}).
+-spec advanced2(any(), any()) -> true.
+advanced2(Event, Player) ->
+  ets:insert(hooks_SUITE_ets, {advanced2, Event, Player}).
 
 %% Utils
 get_hooks() ->
-  #{ app_started         => {?MODULE, start}
-   , player_skipped_task => [{?MODULE, skipped1}, {?MODULE, skipped2}]
+  #{ app_started => {?MODULE, start}
+   , advanced    => [{?MODULE, advanced1}, {?MODULE, advanced2}]
    }.
