@@ -1,6 +1,6 @@
 {application, beam_olympics, [
   {description, "Let's find the best beamer!"},
-  {vsn, "1.2.1"},
+  {vsn, "1.2.2"},
   {id, "beam_olympics"},
   {registered, []},
   {applications, [
