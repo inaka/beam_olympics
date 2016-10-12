@@ -12,7 +12,7 @@
 -spec signup(bo_players:name(), node()) -> bo_players:player().
 signup(PlayerName, Node) ->
   Player = bo_players:new(PlayerName, Node),
-  case sumo:find(players, PlayerName) of
+  case sumo:fetch(players, PlayerName) of
     notfound -> sumo:persist(players, Player);
     OldPlayer ->
       error_logger:warning_msg(
@@ -21,7 +21,7 @@ signup(PlayerName, Node) ->
   end.
 
 -spec fetch(bo_players:name()) -> bo_players:player() | notfound.
-fetch(PlayerName) -> sumo:find(players, PlayerName).
+fetch(PlayerName) -> sumo:fetch(players, PlayerName).
 
 -spec advance(bo_players:player(), bo_players:action()) -> bo_players:player().
 advance(Player, Action) ->
