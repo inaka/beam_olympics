@@ -1,10 +1,22 @@
 # Change Log
 
-## [1.2.0](https://github.com/inaka/beam_olympics/tree/1.2.0) (2016-08-31)
+## [1.2.1](https://github.com/inaka/beam_olympics/tree/1.2.1) (2016-10-12)
+[Full Changelog](https://github.com/inaka/beam_olympics/compare/1.2.0...1.2.1)
+
+**Closed issues:**
+
+- upgrade sumo\_db dependecy [\#47](https://github.com/inaka/beam_olympics/issues/47)
+
+**Merged pull requests:**
+
+- \[\#47\] upgrade sumo\_db to 0.7.0 [\#48](https://github.com/inaka/beam_olympics/pull/48) ([ferigis](https://github.com/ferigis))
+
+## [1.2.0](https://github.com/inaka/beam_olympics/tree/1.2.0) (2016-09-01)
 [Full Changelog](https://github.com/inaka/beam_olympics/compare/1.1.1...1.2.0)
 
 **Merged pull requests:**
 
+- Version Bump to 1.2.0 [\#46](https://github.com/inaka/beam_olympics/pull/46) ([elbrujohalcon](https://github.com/elbrujohalcon))
 - Added new hooks [\#45](https://github.com/inaka/beam_olympics/pull/45) ([HernanRivasAcosta](https://github.com/HernanRivasAcosta))
 
 ## [1.1.1](https://github.com/inaka/beam_olympics/tree/1.1.1) (2016-08-26)
