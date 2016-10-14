@@ -1,14 +1,27 @@
 # Change Log
 
+## [1.2.3](https://github.com/inaka/beam_olympics/tree/1.2.3) (2016-10-14)
+[Full Changelog](https://github.com/inaka/beam_olympics/compare/1.2.2...1.2.3)
+
+**Closed issues:**
+
+- upgrade sumo\_db dependecy [\#55](https://github.com/inaka/beam_olympics/issues/55)
+
+**Merged pull requests:**
+
+- \[\#55\] upgrading sumo dep to 0.7.1 [\#56](https://github.com/inaka/beam_olympics/pull/56) ([ferigis](https://github.com/ferigis))
+
 ## [1.2.2](https://github.com/inaka/beam_olympics/tree/1.2.2) (2016-10-12)
 [Full Changelog](https://github.com/inaka/beam_olympics/compare/1.2.1...1.2.2)
 
 **Closed issues:**
 
+- Version Bump to 1.2.2 [\#53](https://github.com/inaka/beam_olympics/issues/53)
 - Fix sumo:find/2 calls [\#51](https://github.com/inaka/beam_olympics/issues/51)
 
 **Merged pull requests:**
 
+- \[\#53\] version bump to 1.2.2 [\#54](https://github.com/inaka/beam_olympics/pull/54) ([ferigis](https://github.com/ferigis))
 - \[\#51\] fix calls to sumo:find/2 [\#52](https://github.com/inaka/beam_olympics/pull/52) ([ferigis](https://github.com/ferigis))
 
 ## [1.2.1](https://github.com/inaka/beam_olympics/tree/1.2.1) (2016-10-12)
