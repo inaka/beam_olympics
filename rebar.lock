@@ -4,7 +4,7 @@
  {<<"goldrush">>,{pkg,<<"goldrush">>,<<"0.1.8">>},2},
  {<<"lager">>,{pkg,<<"lager">>,<<"3.2.1">>},1},
  {<<"quickrand">>,{pkg,<<"quickrand">>,<<"1.5.4">>},2},
- {<<"sumo_db">>,{pkg,<<"sumo_db">>,<<"0.7.0">>},0},
+ {<<"sumo_db">>,{pkg,<<"sumo_db">>,<<"0.7.1">>},0},
  {<<"uuid">>,{pkg,<<"uuid_erl">>,<<"1.5.2-rc1">>},1},
  {<<"worker_pool">>,{pkg,<<"worker_pool">>,<<"2.0.1">>},1}]}.
 [
@@ -14,7 +14,7 @@
  {<<"goldrush">>, <<"2024BA375CEEA47E27EA70E14D2C483B2D8610101B4E852EF7F89163CDB6E649">>},
  {<<"lager">>, <<"EEF4E18B39E4195D37606D9088EA05BF1B745986CF8EC84F01D332456FE88D17">>},
  {<<"quickrand">>, <<"47ADD4755CC5F209CBEFFD6F47C84061196CD7FAD99FD8FD12418EB0D06B939D">>},
- {<<"sumo_db">>, <<"5C0E00DC07102BB30C192CF75F3601CCD47A4FBA540266132075AEF90AB1F2FB">>},
+ {<<"sumo_db">>, <<"443587FEEE9E6532172039B9C44B38829CB06225ECD10EE05B62CFF14FF570BD">>},
  {<<"uuid">>, <<"D4022AB3F4F1A28E86EA15D4075CB0C57EC908D8AF1CA2E8AF28AA815EF93C3A">>},
  {<<"worker_pool">>, <<"B90273074898FA89434317991E00884DBBAFFAB5BFD964A7586317CD16FB18D4">>}]}
 ].
