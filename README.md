@@ -15,7 +15,7 @@ As stated in rebar.config, **BeamOlympics** server only compiles with Erlang/OTP
 
 ### Installation
 Before you can start playing, you have to install the **BeamOlympics** server.
-To do so, clone this repo and use [reba3](https://github.com/erlang/rebar3) to generate a release for it.
+To do so, clone this repo and use [rebar3](https://github.com/erlang/rebar3) to generate a release for it.
 
 ```bash
 $ git clone https://github.com/inaka/beam_olympics.git
