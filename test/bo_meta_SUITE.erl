@@ -3,7 +3,8 @@
 -include_lib("mixer/include/mixer.hrl").
 -mixin([ktn_meta_SUITE]).
 
--export([init_per_suite/1]).
+-export([ init_per_suite/1
+        , end_per_suite/1]).
 
 -spec init_per_suite(ktn_meta_SUITE:config()) -> ktn_meta_SUITE:config().
 init_per_suite(Config) ->
@@ -18,6 +19,10 @@ init_per_suite(Config) ->
                    }}
   | Config
   ].
+
+-spec end_per_suite(ktn_meta_SUITE:config()) -> ok.
+end_per_suite(_Config) ->
+  ok.
 
 %% @todo remove once http://bugs.erlang.org/browse/ERL-173 is fixed
 dirs(_Config) ->
